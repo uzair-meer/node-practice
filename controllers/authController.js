@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import User, { signToken } from "../models/userModel.js";
-import { aysncHnadler } from "../utils/aysncHandler.js";
+import { aysncHandler } from "../utils/aysncHandler.js";
 import { CustomError } from "../utils/customError.js";
 import util from "util";
 import { sendEmail } from "../utils/email.js";
 import crypto from "crypto";
 // ass soon as user created logged in
-export const signUp = aysncHnadler(async (req, res, next) => {
+export const signUp = aysncHandler(async (req, res, next) => {
   const newUser = await User.create(req.body);
   // sign takes payload and signature/ secret key/string
   // epiration also added to payload
@@ -19,7 +19,7 @@ export const signUp = aysncHnadler(async (req, res, next) => {
 // header payload signature/ secret key
 // signature made of header and patload
 
-export const logIn = aysncHnadler(async (req, res, next) => {
+export const logIn = aysncHandler(async (req, res, next) => {
   console.log("hit");
   const { email, password } = req.body;
   console.log(email, password);
@@ -39,7 +39,7 @@ export const logIn = aysncHnadler(async (req, res, next) => {
   createSendResponse(user, 200, res);
 });
 
-export const isAuthenticated = aysncHnadler(async (req, res, next) => {
+export const isAuthenticated = aysncHandler(async (req, res, next) => {
   // read the token if it exits
   const testToken = req.headers.authorization;
   let token;
@@ -108,7 +108,7 @@ export const restrict = (role) => {
 //     next();
 //   };
 // };
-export const forgotPasword = aysncHnadler(async (req, res, next) => {
+export const forgotPasword = aysncHandler(async (req, res, next) => {
   // 1 gotta get user with given email
   console.log(req.body);
   const user = await User.findOne({ email: req.body.email });
@@ -157,7 +157,7 @@ export const forgotPasword = aysncHnadler(async (req, res, next) => {
   }
 });
 
-export const resetPsssword = aysncHnadler(async (req, res, next) => {
+export const resetPsssword = aysncHandler(async (req, res, next) => {
   const token = crypto
     .createHash("sha256")
     .update(req.params.token)
@@ -193,7 +193,7 @@ export const resetPsssword = aysncHnadler(async (req, res, next) => {
   });
 });
 
-export const updatePassword = aysncHnadler(async (req, res, next) => {
+export const updatePassword = aysncHandler(async (req, res, next) => {
   // geeting current user from database thts on req.user thas been assigned to req during auth middleware
 
   const user = await User.findById(req.user._id).select("+password");

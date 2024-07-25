@@ -9,11 +9,6 @@ import {
 } from "../controllers/userContoller.js";
 
 const router = express.Router();
-
-router.get("/users", getAllUsers);
-router.get("/users/:id", getUser);
-router.delete("/users/:id", isAuthenticated, restrict("admin"), deleteUser);
-router.patch("/updateMe", isAuthenticated, updateMe);
-router.delete("/deleteMe", isAuthenticated, deleteMe);
+router.route("/users").get(getAllUsers);
 
 export { router as clientRoutes };

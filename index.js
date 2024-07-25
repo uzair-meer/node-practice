@@ -9,16 +9,17 @@ import { clientRoutes } from "./routes/user.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { CustomError } from "./utils/customError.js";
 import { globalErrorHandler } from "./controllers/errorController.js";
+import { movieRoutes } from "./routes/movie.routes.js";
 
 const app = express();
 //  add securty headers to response
-app.use(helmet());
+// app.use(helmet());
 // retuns midllware
-const limiter = rateLimit({
-  max: 3,
-  windowMs: 60 * 60 * 1000,
-  message: "we have receive too many requests please try again after 1 hour",
-});
+// const limiter = rateLimit({
+//   max: 3,
+//   windowMs: 60 * 60 * 1000,
+//   message: "we have receive too many requests please try again after 1 hour",
+// });
 
 // making sure we dont get data more than 10kb
 app.use(
@@ -28,12 +29,13 @@ app.use(
 );
 // sanitize look for no sql query
 // in req byd, params or query
-app.use(sanitize({}));
-app.use("/api", limiter);
+// app.use(sanitize({}));
+// app.use("/api", limiter);
 app.use(express.urlencoded({ extended: true }));
 configCloudinary();
-app.use("/api/auth", authRoutes);
-app.use("/api/user", clientRoutes);
+app.use(authRoutes);
+app.use(clientRoutes);
+app.use(movieRoutes);
 
 app.all("*", (req, res, next) => {
   //   res.status(404).json({

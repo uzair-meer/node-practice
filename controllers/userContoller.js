@@ -1,20 +1,27 @@
 import User from "../models/userModel.js";
-import { aysncHnadler } from "../utils/aysncHandler.js";
+import { aysncHandler } from "../utils/aysncHandler.js";
 import { CustomError } from "../utils/customError.js";
+// export const checkId = async (req, res, next, value) => {
+//   const user = await User.findById(value);
 
-export const getAllUsers = aysncHnadler(async (req, res, next) => {
-  console.log('hi')
+//   if (!user) {
+//     const error = new CustomError("user with given id not found", 404);
+//     return next(error);
+//   }
+// };
+
+export const getAllUsers = aysncHandler(async (req, res, next) => {
+  console.log("all users");
   const users = await User.find();
-
   res.status(200).json({
-    status: "success",
+    staus: "success",
     data: {
       users,
     },
   });
 });
 
-export const getUser = aysncHnadler(async (req, res, next) => {
+export const getUser = aysncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
@@ -29,7 +36,7 @@ export const getUser = aysncHnadler(async (req, res, next) => {
   });
 });
 
-export const deleteUser = aysncHnadler(async (req, res, next) => {
+export const deleteUser = aysncHandler(async (req, res, next) => {
   console.log(req.params.id);
   const user = await User.findById(req.params.id);
 
@@ -45,7 +52,7 @@ export const deleteUser = aysncHnadler(async (req, res, next) => {
   });
 });
 
-export const updateMe = aysncHnadler(async (req, res, next) => {
+export const updateMe = aysncHandler(async (req, res, next) => {
   // only update user details other than password
   if (req.body.password || req.body.confirmPassword) {
     return next(
@@ -67,8 +74,8 @@ export const updateMe = aysncHnadler(async (req, res, next) => {
   });
 });
 
-export const deleteMe = aysncHnadler(async (req, res, next) => {
-  console.log("user id",req.user.id)
+export const deleteMe = aysncHandler(async (req, res, next) => {
+  console.log("user id", req.user.id);
   await User.findByIdAndUpdate(req.user.id, { active: false });
   res.status(204).json({
     status: "success",
