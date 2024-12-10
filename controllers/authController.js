@@ -20,9 +20,7 @@ export const signUp = aysncHandler(async (req, res, next) => {
 // signature made of header and patload
 
 export const logIn = aysncHandler(async (req, res, next) => {
-  console.log("hit");
   const { email, password } = req.body;
-  console.log(email, password);
   if (!email || !password) {
     const error = new CustomError("plese provide email and password", 404);
     return next(error);
@@ -57,7 +55,6 @@ export const isAuthenticated = aysncHandler(async (req, res, next) => {
     token,
     process.env.SECRET_STRING
   );
-  console.log("token", decodedToken);
 
   const user = await User.findById(decodedToken.id);
   // if user exists in db
@@ -70,7 +67,7 @@ export const isAuthenticated = aysncHandler(async (req, res, next) => {
   const isPasswordChanged = await user.isPasswordChanged(decodedToken.iat);
   if (isPasswordChanged) {
     const error = new CustomError(
-      "password been chnaged login with new token",
+      "password been changed login with new token",
       401
     );
     return next(error);
@@ -95,19 +92,6 @@ export const restrict = (role) => {
   };
 };
 
-// for multiple roles to havew same access
-// export const restrict = (...role) => {
-//   return (req, res, next) => {
-//     if (!role.includes(req.user.role)) {
-//       const error = new CustomError(
-//         "you dont have access to perform this action",
-//         403
-//       );
-//       next(error);
-//     }
-//     next();
-//   };
-// };
 export const forgotPasword = aysncHandler(async (req, res, next) => {
   // 1 gotta get user with given email
   console.log(req.body);
@@ -212,7 +196,7 @@ export const updatePassword = aysncHandler(async (req, res, next) => {
   createSendResponse(user, 200, res);
 });
 
-export const createSendResponse = (user, statusCode, res) => {
+const createSendResponse = (user, statusCode, res) => {
   const token = signToken(user._id);
 
   const options = {
@@ -236,3 +220,17 @@ export const createSendResponse = (user, statusCode, res) => {
     },
   });
 };
+
+// for multiple roles to havew same access
+// export const restrict = (...role) => {
+//   return (req, res, next) => {
+//     if (!role.includes(req.user.role)) {
+//       const error = new CustomError(
+//         "you dont have access to perform this action",
+//         403
+//       );
+//       next(error);
+//     }
+//     next();
+//   };
+// };

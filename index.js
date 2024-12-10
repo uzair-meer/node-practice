@@ -5,15 +5,17 @@ import helmet from "helmet";
 import sanitize from "express-mongo-sanitize";
 import "./config/connectDB.js";
 import { configCloudinary } from "./config/cloudinaryConfig.js";
-import { clientRoutes } from "./routes/user.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { CustomError } from "./utils/customError.js";
 import { globalErrorHandler } from "./controllers/errorController.js";
 import { movieRoutes } from "./routes/movie.routes.js";
+import { connectionRoutes } from "./routes/connection.routes.js";
+import { clientRoutes } from "./routes/user.routes.js";
 
 const app = express();
 //  add securty headers to response
-// app.use(helmet());
+app.use(helmet());
+
 // retuns midllware
 // const limiter = rateLimit({
 //   max: 3,
@@ -29,13 +31,15 @@ app.use(
 );
 // sanitize look for no sql query
 // in req byd, params or query
-// app.use(sanitize({}));
+app.use(sanitize({}));
+
 // app.use("/api", limiter);
 app.use(express.urlencoded({ extended: true }));
 configCloudinary();
 app.use(authRoutes);
-app.use(clientRoutes);
 app.use(movieRoutes);
+app.use(clientRoutes);
+app.use(connectionRoutes);
 
 app.all("*", (req, res, next) => {
   //   res.status(404).json({

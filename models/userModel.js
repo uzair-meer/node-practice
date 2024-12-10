@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "pleqse enter your email"],
+    required: [true, "please enter your email"],
     unique: true,
     validate: [validator.isEmail, "please enter your valid email"],
   },
@@ -115,15 +115,15 @@ userSchema.methods.createResetPasswordToken = function () {
   // unless.save()
   // ecrypted reset stored in db
   // simple tokensent to user
-  // then when iser send token , we compare with encrypted on
+  // then when user send token , we compare with encrypted on
   return resetToken;
 };
 // pre middle ware // before quer
 // moiddleware function
-userSchema.pre(/^find/, function (next) {
-  // this keyword reprsenrs perenst running
-  // it runs before any FIND query runs
-  this.find({ active: true });
-});
+// userSchema.pre(/^find/, function (next) {
+//   // this keyword reprsenrs perenst running
+//   // it runs before any FIND query runs
+//   this.find({ active: true });
+// });
 const User = mongoose.model("User", userSchema);
 export default User;

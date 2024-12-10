@@ -8,6 +8,7 @@ import {
   updatePassword,
 } from "../controllers/authController.js";
 import { singleUpload } from "../middleware/multer.js";
+import { getAllUsers } from "../controllers/userContoller.js";
 const router = express.Router();
 
 router.route("/signup").post(singleUpload, signUp);
